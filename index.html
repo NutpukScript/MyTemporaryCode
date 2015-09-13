@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+
+	<script type="text/javascript">
+		
+	function generateOBJ ( date, data ){
+
+		var previousDate = date.getDate();
+		date.setDate( previousDate + 1);
+		var newDate = new Date(date);
+
+		return  [newDate, data]; 
+	}
+
+	function createSeriesByYear (listTarget, data){
+
+		var evaluateWhichTarget = function( date ){
+
+			var isFound = false;
+			var getCurrentYear = date.getFullYear();
+
+			for( var count = 0 ; count < listTarget.length ; count++){
+
+				if( listTarget[count].serieName === getCurrentYear ){
+					isFound = true;
+
+					listTarget[count].data.push(data);
+				}
+
+			}
+
+			if(isFound === false )
+			{
+				listTarget.push(
+					{
+						serieName: getCurrentYear,
+						data: [data]
+					});
+			}
+
+		}
+
+		var date = data[0];
+
+		evaluateWhichTarget(date);
+
+	}
+
+	window.onload = function () {
+
+		var currentDate = new Date();
+		var lengthData = 365 * 5;
+
+		var listData = [];
+		var listTarget = [];
+
+		for( var count = 0 ; count < lengthData ; count++){
+
+			listData.push( generateOBJ(currentDate, count) );
+
+		}
+
+
+		window.datalist = listData;
+
+
+		for( var count = 0; count < listData.length; count++){
+
+			var eachData = listData[count];
+
+
+			createSeriesByYear(listTarget, eachData);
+		}
+
+		window.serieList = listTarget;
+
+
+
+	}
+
+
+	</script>
+		}
+</head>
+<body>
+	<div id="data" style="width:100%;">
+	</div>
+</body>
+</html>
